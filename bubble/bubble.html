@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>버블슈팅</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #wrapper {
+      width: 600px;
+      height: 600px;
+      background: pink;
+      margin: auto;
+      position: relative;
+    }
+
+    input[type=text] {
+      width: 100px;
+      height: 20px;
+      border-radius: 15%;
+      border: 4px solid #fff;
+      background: black;
+      position: absolute;
+      z-index: 999;
+      opacity: 0.7;
+    }
+
+    span {
+      width: 80px;
+      height: 20px;
+      background: #6a6060;
+      border: 4px solid #fff;
+      border-radius: 15px;
+      /* opacity: 0.7; */
+      position: absolute;
+      z-index: 9999;
+      color: #fff;
+      font-weight: bold;
+      text-align: center;
+      line-height: 20px;
+    }
+  </style>
+  <script src="./GameObject.js"></script>
+  <script src="./Ball.js"></script>
+  <script src="./Enemy.js"></script>
+  <script src="./Sensor.js"></script>
+  <script src="./LeftSensor.js"></script>
+  <script src="./RightSensor.js"></script>
+  <script src="./TopSensor.js"></script>
+  <script src="./BottomSensor.js"></script>
+  <script src="../js/lib.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script>
+    let wrapper;
+    let ball;
+    let ballArray = []; // 주인공을 담을 배열
+    let enemyArray = []; // 적군을 담을 배열
+    let ballColorArray = ["red", "yellow", "lightgreen", "lightskyblue"];
+
+    function createEnemy() {
+      let gap = 0;
+      for (let a = 0; a < 4; a++) {
+        // let array = new Array(15);
+        let array;
+        if (a % 2 == 0) {
+          gap = 0;
+          array = new Array(15);
+        } else {
+          gap = 20;
+          array = new Array(14);
+        }
+        for (let i = 0; i < array.length; i++) {
+          let row = new Enemy(wrapper, 40, 40, gap + (i * 40), a * 40, 0, 0, ballColorArray[getRandom(ballColorArray.length)]);
+          array[i] = row;
+        }
+        enemyArray.push(array);
+      }
+    }
+
+    function fire() {
+      ball = new Ball(wrapper, 40, 40, 0, 520, 0, 0, ballColorArray[getRandom(ballColorArray.length)]);
+      ballArray.push(ball);
+    }
+
+    function loop() {
+      for(let i=0; i<ballArray.length; i++) {
+        ballArray[i].tick();
+        ballArray[i].render();
+      }
+    }
+
+    function init() {
+      wrapper = document.getElementById("wrapper");
+    }
+
+    $(function () {
+      init();
+      createEnemy();
+      setInterval("loop()", 10);
+
+      $(document.body).on("keydown", function(e) {
+        switch(e.keyCode) {
+          case 32 : fire(); break; // spacebar
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <span>0</span>
+  </div>
+</body>
+
+</html>
