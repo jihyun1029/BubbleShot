@@ -7,19 +7,19 @@ class Ball extends GameObject {
     this.topSensor = new TopSensor(this.container, 30, 2, this.x + 5, this.y - 2, "purple");
     this.bottomSensor = new BottomSensor(this.container, 30, 2, this.x + 5, this.y + this.height, "purple");
 
-    this.r=0;//공의 각도정보 360
+    this.r = 90;//공의 각도정보 360
     this.createAngle();
   }
 
   //공 중앙에 각도기 생성하기 
-  createAngle(){
+  createAngle() {
     this.angleDiv = document.createElement("div");
-    this.angleDiv.style.width = 40+"px";
+    this.angleDiv.style.width = 40 + "px";
     this.angleDiv.style.height = 40 + "px";
-    
+
     this.angleDiv.style.position = "absolute";
     this.angleDiv.style.left = 220 + "px";
-    this.angleDiv.style.top = 480 + "px";
+    this.angleDiv.style.top = 470 + "px";
 
     // this.angleDiv.style.background = "black";
 
@@ -29,16 +29,24 @@ class Ball extends GameObject {
 
     this.container.appendChild(this.angleDiv);
     this.angleDiv.appendChild(this.angleDivImg);
+
+    this.fireFlag = false;
   }
 
   //볼이 보유한 각도기의 각도조절 렌더링
-  renderAngle(){
-    this.angleDiv.style.transform = "rotate(" + this.r + "deg)";
+  renderAngle() {
+    this.angleDiv.style.transform = "rotate(" + (this.r + 90) + "deg)";
   }
 
   tick() {
-    this.x += this.velX;
-
+    if(this.fireFlag) {
+      this.x += 1;
+      let radians = this.r * Math.PI / 180;
+      let tan =  Math.tan(radians);
+      this.y -=  Math.abs(tan);
+      // console.log(this.y);
+    }
+    
     // this.y = Math.tan(30 * Math.PI/180);
 
     // 공이 보유한 센서막대들에 대해서도 tick()

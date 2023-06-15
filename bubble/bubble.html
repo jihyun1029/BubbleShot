@@ -16,10 +16,12 @@
       background: pink;
       margin: auto;
       position: relative;
-      /* background: url(./images/gb.webp);
+      background: linear-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2)), url(./images/gb.webp);
+      /* background: url(./images/gb.webp); */
       background-repeat: no-repeat;
       background-size: 100% 100%;
-      opacity: 0.8; */
+      /* opacity: 0.8; */
+      overflow: hidden;
     }
 
     input[type=text] {
@@ -39,7 +41,7 @@
       background: #6a6060;
       border: 4px solid #fff;
       border-radius: 15px;
-      /* opacity: 0.7; */
+      opacity: 0.7;
       position: absolute;
       z-index: 9999;
       color: #fff;
@@ -47,6 +49,7 @@
       text-align: center;
       line-height: 20px;
     }
+
   </style>
   <script src="./GameObject.js"></script>
   <script src="./Ball.js"></script>
@@ -64,6 +67,19 @@
     let ballArray = []; // 주인공을 담을 배열
     let enemyArray = []; // 적군을 담을 배열
     let ballColorArray = ["red", "yellow", "lightgreen", "lightskyblue"];
+
+    function move() {
+      if (ball.x >= 480 - 40) {
+        ball.velX = -ball.velX;
+      } else if (ball.x <= 0) {
+        ball.velX = -ball.velX;
+      }
+      if (ball.y >= 480 - 40) {
+        ball.velY = -ball.velY;
+      } else if (ball.y <= 0) {
+        ball.velY = -ball.velY;
+      }
+    }
 
     function createEnemy() {
       let gap = 0;
@@ -90,21 +106,26 @@
       ballArray.push(ball);
     }
 
-    function setRotate(n){
-      ballArray[0].r+=n;
+    function setRotate(n) {
+      ballArray[0].r += n;
     }
-    
-    // 현재 공이 보유한 r 각도 값을 라디안으로 바꿔서 x축에 대한 y축의 값을 구하여 공의 좌표에 써먹자
-    function fire(){
+
+    function removeBall() {
       for(let i=0; i<ballArray.length; i++) {
-        let radians = ball.r * Math.PI/180;
-        ballArray[i].y = Math.tan(radians);
-        console.log(ballArray[i] + "번째 공의 " + ball.r + " 각도는 라디안으로는 ", radians);
+        wrapper.removeChild(ballArray[i].angleDiv);
+        wrapper.removeChild(ballArray[i].div);
+        ballArray[i].fireFlag = false;
+        ballArray.splice(0,1);
       }
     }
 
+    // 현재 공이 보유한 r 각도 값을 라디안으로 바꿔서 x축에 대한 y축의 값을 구하여 공의 좌표에 써먹자
+    function fire() {
+      ball.fireFlag = true;
+    }
+
     function loop() {
-      for(let i=0; i<ballArray.length; i++) {
+      for (let i = 0; i < ballArray.length; i++) {
         ballArray[i].tick();
         ballArray[i].render();
       }
@@ -119,12 +140,12 @@
       createEnemy();
       setInterval("loop()", 10);
 
-      $(document.body).on("keydown", function(e) {
-        switch(e.keyCode) {
-          case 32 : createBall(); break; // spacebar
-          case 37 : setRotate(-1); break; // 좌측으로
-          case 39 : setRotate(1); break; // 우측으로
-          case 13 : fire(); break; // enter 공 발사
+      $(document.body).on("keydown", function (e) {
+        switch (e.keyCode) {
+          case 32: removeBall(); createBall(); break; // spacebar
+          case 37: setRotate(1); break; // 좌측으로
+          case 39: setRotate(-1); break; // 우측으로
+          case 13: fire(); break; // enter 공 발사
         }
       });
     });
