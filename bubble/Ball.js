@@ -6,6 +6,34 @@ class Ball extends GameObject {
     this.rightSensor = new RightSensor(this.container, 2, 30, this.x + this.width, this.y + 7, "purple");
     this.topSensor = new TopSensor(this.container, 30, 2, this.x + 5, this.y - 2, "purple");
     this.bottomSensor = new BottomSensor(this.container, 30, 2, this.x + 5, this.y + this.height, "purple");
+
+    this.r=0;//공의 각도정보 360
+    this.createAngle();
+  }
+
+  //공 중앙에 각도기 생성하기 
+  createAngle(){
+    this.angleDiv = document.createElement("div");
+    this.angleDiv.style.width = 40+"px";
+    this.angleDiv.style.height = 40 + "px";
+    
+    this.angleDiv.style.position = "absolute";
+    this.angleDiv.style.left = 220 + "px";
+    this.angleDiv.style.top = 480 + "px";
+
+    // this.angleDiv.style.background = "black";
+
+    this.angleDivImg = document.createElement("img");
+    this.angleDivImg.src = "./images/arrow.png";
+    this.angleDivImg.style.width = 100 + "%";
+
+    this.container.appendChild(this.angleDiv);
+    this.angleDiv.appendChild(this.angleDivImg);
+  }
+
+  //볼이 보유한 각도기의 각도조절 렌더링
+  renderAngle(){
+    this.angleDiv.style.transform = "rotate(" + this.r + "deg)";
   }
 
   tick() {
@@ -25,5 +53,7 @@ class Ball extends GameObject {
 
     this.bottomSensor.tick();
     this.bottomSensor.render();
+
+    this.renderAngle();
   }
 }
