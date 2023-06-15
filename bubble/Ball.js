@@ -11,7 +11,18 @@ class Ball extends GameObject {
     this.createAngle();
   }
 
-  //공 중앙에 각도기 생성하기 
+  hitCheck() {
+    // 적군 수 만큼 반복하면서 공와 각각의 적군간 충돌체크
+    for(let i=0; i<enemyArray.length; i++) {
+      let result = collisionCheck(this, enemyArray[i]);
+
+      if(result) {
+        this.y = enemyArray[i].y + this.height;
+      }
+    }
+  }
+
+  //공 중앙에 각도기 생성하기
   createAngle() {
     this.angleDiv = document.createElement("div");
     this.angleDiv.style.width = 40 + "px";
@@ -63,5 +74,7 @@ class Ball extends GameObject {
     this.bottomSensor.render();
 
     this.renderAngle();
+
+    this.hitCheck();
   }
 }
