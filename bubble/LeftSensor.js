@@ -17,9 +17,18 @@ class LeftSensor extends Sensor {
 
         //마주치면
         if (result) {
+          console.log(enemyArray[i][j], "충돌함");
+
           this.flag = false; //공 그자리에 멈추기
-          this.angleDiv.removeChild(this.angleDivImg);//공이 보유한 화살표도 제거
-          this.y = enemyArray[i][j].y + this.height;
+
+          //console.log("this.angleDiv is ", enemyArray[i][j].angleDiv);
+
+          //enemyArray[enemyArray.length-1]
+          //주인공 볼 
+          //let ball=enemyArray[enemyArray.length-1][enemyArray[enemyArray.length-1].length-1];
+          ball.angleDiv.removeChild(ball.angleDivImg);//공이 보유한 화살표도 제거
+          ball.y = ball.y + ball.height;
+
           break;
         }
       }

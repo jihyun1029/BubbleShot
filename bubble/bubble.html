@@ -103,7 +103,9 @@
     }
 
     function createBall() {
+      //constructor(container, width, height, x, y, velX, velY, bg, flag) 
       ball = new Ball(wrapper, 40, 40, 220, 520, 0, 0, ballColorArray[getRandom(ballColorArray.length)], true);
+      
       enemyArray[enemyArray.length-1].push(ball);
     }
 

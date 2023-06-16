@@ -2,7 +2,7 @@
 
 class Sensor {
   constructor(container, width, height, x, y, bg, flag) {
-    console.log("저 센서이고 태어날때 flag은 ", flag);
+    //console.log("저 센서이고 태어날때 flag은 ", flag);
     this.container = container;
     this.div;
     this.width = width;
