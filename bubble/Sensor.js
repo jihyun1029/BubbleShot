@@ -1,7 +1,8 @@
 // 4방향의 센서들의 최상위 객체를 정의한다
 
 class Sensor {
-  constructor(container, width, height, x, y, bg) {
+  constructor(container, width, height, x, y, bg, flag) {
+    console.log("저 센서이고 태어날때 flag은 ", flag);
     this.container = container;
     this.div;
     this.width = width;
@@ -9,6 +10,7 @@ class Sensor {
     this.x = x;
     this.y = y;
     this.bg = bg;
+    this.flag=flag;
 
     this.div = document.createElement("div");
     this.div.style.width = this.width + "px";
