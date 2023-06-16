@@ -16,7 +16,7 @@
       background: pink;
       margin: auto;
       position: relative;
-      background: linear-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2)), url(./images/gb.webp);
+      background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(./images/gb.webp);
       /* background: url(./images/gb.webp); */
       background-repeat: no-repeat;
       background-size: 100% 100%;
@@ -49,7 +49,6 @@
       text-align: center;
       line-height: 20px;
     }
-
   </style>
   <script src="./GameObject.js"></script>
   <script src="./Ball.js"></script>
@@ -63,23 +62,24 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script>
     let wrapper;
-    let ball;
-    let ballArray = []; // 주인공을 담을 배열
+    let ball; //현재 발사될 공
+    let ballArray = []; // 
     let enemyArray = []; // 적군을 담을 배열
     let ballColorArray = ["red", "yellow", "lightgreen", "lightskyblue"];
+    let flag = true;
 
-    function move() {
-      if (ball.x >= 480 - 40) {
-        ball.velX = -ball.velX;
-      } else if (ball.x <= 0) {
-        ball.velX = -ball.velX;
-      }
-      if (ball.y >= 480 - 40) {
-        ball.velY = -ball.velY;
-      } else if (ball.y <= 0) {
-        ball.velY = -ball.velY;
-      }
-    }
+    // function move() {
+    //   if (ball.x >= 480 - 40) {
+    //     ball.velX = -ball.velX;
+    //   } else if (ball.x <= 0) {
+    //     ball.velX = -ball.velX;
+    //   }
+    //   if (ball.y >= 480 - 40) {
+    //     ball.velY = -ball.velY;
+    //   } else if (ball.y <= 0) {
+    //     ball.velY = -ball.velY;
+    //   }
+    // }
 
     function createEnemy() {
       let gap = 0;
@@ -94,28 +94,30 @@
           array = new Array(11);
         }
         for (let i = 0; i < array.length; i++) {
-          let row = new Enemy(wrapper, 40, 40, gap + (i * 40), a * 40, 0, 0, ballColorArray[getRandom(ballColorArray.length)]);
-          array[i] = row;
+          // container, width, height, x, y, velX, velY, bg, flag
+          let ball = new Ball(wrapper, 40, 40, gap + (i * 40), a * 40, 0, 0, ballColorArray[getRandom(ballColorArray.length)], false);
+          array[i] = ball;
         }
         enemyArray.push(array);
       }
     }
 
     function createBall() {
-      ball = new Ball(wrapper, 40, 40, 220, 520, 0, 0, ballColorArray[getRandom(ballColorArray.length)]);
-      ballArray.push(ball);
+      ball = new Ball(wrapper, 40, 40, 220, 520, 0, 0, ballColorArray[getRandom(ballColorArray.length)], true);
+      enemyArray[enemyArray.length-1].push(ball);
     }
 
     function setRotate(n) {
-      ballArray[0].r += n;
+      ball.r += n;
     }
 
+    //퍼즐이 3개이상 연속되면, 관련된 볼 모두 제거
     function removeBall() {
-      for(let i=0; i<ballArray.length; i++) {
+      for (let i = 0; i < ballArray.length; i++) {
         wrapper.removeChild(ballArray[i].angleDiv);
         wrapper.removeChild(ballArray[i].div);
         ballArray[i].fireFlag = false;
-        ballArray.splice(0,1);
+        ballArray.splice(0, 1);
       }
     }
 
@@ -125,9 +127,13 @@
     }
 
     function loop() {
-      for (let i = 0; i < ballArray.length; i++) {
-        ballArray[i].tick();
-        ballArray[i].render();
+      if (flag) {
+        for(let a=0;a<enemyArray.length;a++){
+          for (let i = 0; i < enemyArray[a].length; i++) {
+            enemyArray[a][i].tick();
+            enemyArray[a][i].render();
+          }
+        }
       }
     }
 
@@ -142,9 +148,10 @@
 
       $(document.body).on("keydown", function (e) {
         switch (e.keyCode) {
-          case 32: removeBall(); createBall(); break; // spacebar
-          case 37: setRotate(1); break; // 좌측으로
-          case 39: setRotate(-1); break; // 우측으로
+          case 27 : flag = !flag; break;
+          case 32: createBall(); break; // spacebar
+          case 37: setRotate(-1); break; // 좌측으로
+          case 39: setRotate(1); break; // 우측으로
           case 13: fire(); break; // enter 공 발사
         }
       });
