@@ -18,8 +18,8 @@ class RightSensor extends Sensor {
         //마주치면
         if (result) {
           this.flag = false; //공 그자리에 멈추기
-          this.angleDiv.removeChild(this.angleDivImg);//공이 보유한 화살표도 제거
-          this.y = enemyArray[i][j].y + this.height;
+          ball.angleDiv.removeChild(ball.angleDivImg);//공이 보유한 화살표도 제거
+          ball.y = ball.y + ball.height;
           break;
         }
       }

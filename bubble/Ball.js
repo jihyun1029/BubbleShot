@@ -13,6 +13,12 @@ class Ball extends GameObject {
     if(this.flag){
       this.createAngle();
     }
+
+    this.sensorArray=[];
+    this.sensorArray.push(this.leftSensor);
+    this.sensorArray.push(this.rightSensor);
+    this.sensorArray.push(this.topSensor);
+    this.sensorArray.push(this.bottomSensor);
   }
 
   //공 중앙에 각도기 생성하기
@@ -44,7 +50,6 @@ class Ball extends GameObject {
   }
 
   tick() {
-    
     if(this.flag){
            
       if (this.fireFlag) {
